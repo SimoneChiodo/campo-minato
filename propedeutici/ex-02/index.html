@@ -14,8 +14,34 @@
     />
   </head>
   <body>
-    <h1 class="text-center mt-5">Esercizio propedeutico 2</h1>
-    <h2 class="text-center">Generazione Array Random</h2>
+    <div class="container d-flex flex-column align-items-center">
+      <!-- TITOLO -->
+      <h1 class="text-center mt-5">Esercizio propedeutico 2</h1>
+      <h2 class="text-center">Generazione Array Random</h2>
+
+      <!-- FORM -->
+      <form id="formGenerateNumbers" class="row g-3 mt-3 border rounded-3 px-3 py-4">
+        <div class="col-12 text-center mt-0">
+          <label for="inputNumbers" class="form-label">Quanti numeri generare (0-100): </label>
+          <input type="number" id="inputNumbers" class="form-control" min="0" max="100">
+        </div>
+
+        <div class="col-12">
+          <input type="submit" value="Conferma" class="form-control btn btn-primary">
+        </div>
+      </form>
+
+      <!-- NUMERI -->
+      <div id="numbersContainer" class="row mt-5 border rounded-3 px-3 py-4 d-none"></div>
+      <!-- RICERCA NUMERI -->
+      <form id="formSearchNumbers" class="row row-cols-1 g-3 mt-3 border rounded-3 px-3 py-4 d-none">
+        <label for="numberSearch" class="form-label mt-0">Vuoi sapere se un numero è presente?</label>
+        <input type="search" id="numberSearch" class="form-control">
+        <input type="submit" value="Cerca" class="form-control btn btn-success">
+      </form>
+      <!-- RISPOSTA RICERCA NUMERI -->
+      <h3 id="numbersSearchAnswer"></h3>
+    </div>
 
     <!-- MAIN JS -->
     <script src="./main.js"></script>
