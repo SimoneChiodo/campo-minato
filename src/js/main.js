@@ -24,10 +24,22 @@ console.table(bombs);
 // Inserisco le celle in HTML
 for(let i = 0; i < cellsNumber; i++) {
   grid.innerHTML += `<div class="col"> 
-      <button id="cell-${i+1}" class="btn btn-success rounded-0 fs-5" onclick="cellClick(${i+1})">  </button>
+      <button id="cell-${i+1}" class="btn btn-success rounded-0 fs-5 cell">  </button>
     </col>`;
 }
 
+const cells = document.getElementsByClassName("cell"); // Prendo tutte le celle in pagina
+// A ogni cella aggiungo gli eventi al click
+for (const cell of cells) { 
+  cell.addEventListener("mousedown", e => {
+    if (e.button == 0) { // Click sinistro del mouse
+      const index = cell.id.split("-")[1];
+      cellClick(index);
+    } else if (e.button == 2 && cell.innerText === "") { // Click destro del mouse
+      alert("right click");
+    }
+  });
+}
 // Funzione chiamata a ogni clic di una cella
 function cellClick(index) {
   // Se è stata cliccata una bomba
@@ -45,7 +57,7 @@ function cellClick(index) {
     cell.innerText = revealCell(index); // Mostro la cella
 
     // Se il giocatore ha vinto
-    if(clickedCells.size === (cellsNumber - 16)){
+    if(clickedCells.size === (cellsNumber - 16)) {
       gameWin = true;
       resultText.innerText = "Hai vinto!";
     }
@@ -56,6 +68,7 @@ function cellClick(index) {
   }
 }
 
+// Funzione che restituisce il numero delle bombe vicino alla casella
 function revealCell(index) {
   let nearBombsCounter = 0;
   let cellsPerLine = Math.sqrt(cellsNumber); // Radice quadrata del numero di celle totali (risultato: celle per linea)
