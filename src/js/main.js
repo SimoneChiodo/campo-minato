@@ -24,7 +24,7 @@ console.table(bombs);
 // Inserisco le celle in HTML
 for(let i = 0; i < cellsNumber; i++) {
   grid.innerHTML += `<div class="col"> 
-      <button id="cell-${i+1}" class="btn btn-success rounded-0" onclick="cellClick(${i+1})">  </button>
+      <button id="cell-${i+1}" class="btn btn-success rounded-0 fs-5" onclick="cellClick(${i+1})">  </button>
     </col>`;
 }
 
