@@ -43,18 +43,23 @@ for (const cell of cells) {
 }
 // Funzione chiamata a ogni clic di una cella
 function cellClick(index) {
+  // Prendo la cella selezionata
+  const cell = document.getElementById(`cell-${index}`); 
+  
+  if(cell.innerText === "🚩") // Se questa casella è stata segnalata, allora non faccio nulla
+    return;
+
   // Se è stata cliccata una bomba
   if(bombs.has(index) && gameWin === null) {
     // Rivelo le bombe
     bombs.forEach(bomb => {
-      const cell = document.getElementById(`cell-${bomb}`); // Celle con una bomba
-      cell.innerText = cell.innerText !== "🚩" &&  "B";
+      const cell = document.getElementById(`cell-${bomb}`); // Cella con la bomba
+      cell.innerText !== "🚩" && (cell.innerText = "💣"); // Non sovrascrivo il testo se era stata segnalata
     });
     // Informo che si ha perso
     gameWin = false;
     resultText.innerText = "Hai perso!";
   } else if(gameWin === null) {
-    const cell = document.getElementById(`cell-${index}`); // Prendo la cella selezionata
     cell.innerText = revealCell(index); // Mostro la cella
 
     // Aggiungi la cella alle caselle cliccate
