@@ -1,10 +1,14 @@
 // Prendo gli elementi dalla pagina
 const grid = document.getElementById("grid"); // Griglia del campo minato
+const scoreText = document.getElementById("scoreText"); // Punteggio a schermo
+const resultText = document.getElementById("resultText"); // Risultato della partita
 
 // Creo le variabili necessarie
 const array = []; // Array rappresentativo della griglia
 let difficulty = 1; // 1: facile; 2: medio; 3: difficile
 let cellsNumber; // Numero delle celle presenti nella griglia
+let gameWin = null;
+let clickedCells = new Set();
 
 // Inizializzo i dati
 getCellsNumber();
@@ -24,13 +28,28 @@ for(let i = 0; i < cellsNumber; i++) {
     </col>`;
 }
 
+// Funzione chiamata a ogni clic di una cella
 function cellClick(index) {
+  // Se è stata cliccata una bomba
   if(bombs.has(index)) {
     // Rivelo le bombe
     bombs.forEach(bomb => {
       const cell = document.getElementById(`cell-${bomb}`);
       cell.innerText = "B";
     });
+    // Informo che si ha perso
+    gameWin = false;
+    resultText.innerText = "Hai perso!";
+  } else if(gameWin !== false) {
+    // Se il giocatore ha vinto
+    if(clickedCells.size === (cellsNumber - 16)){
+      gameWin = true;
+      resultText.innerText = "Hai vinto!";
+    }
+
+    // Aggiungi la cella alle caselle cliccate
+    clickedCells.add(index);
+    scoreText.innerText = `Punteggio: ${clickedCells.size}`;
   }
 }
 
