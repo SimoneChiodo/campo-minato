@@ -44,28 +44,28 @@ for (const cell of cells) {
 // Funzione chiamata a ogni clic di una cella
 function cellClick(index) {
   // Se è stata cliccata una bomba
-  if(bombs.has(index)) {
+  if(bombs.has(index) && gameWin === null) {
     // Rivelo le bombe
     bombs.forEach(bomb => {
       const cell = document.getElementById(`cell-${bomb}`); // Celle con una bomba
-      cell.innerText = "B";
+      cell.innerText = cell.innerText !== "🚩" &&  "B";
     });
     // Informo che si ha perso
     gameWin = false;
     resultText.innerText = "Hai perso!";
-  } else if(gameWin !== false) {
+  } else if(gameWin === null) {
     const cell = document.getElementById(`cell-${index}`); // Prendo la cella selezionata
     cell.innerText = revealCell(index); // Mostro la cella
-
-    // Se il giocatore ha vinto
-    if(clickedCells.size === (cellsNumber - 16)) {
-      gameWin = true;
-      resultText.innerText = "Hai vinto!";
-    }
 
     // Aggiungi la cella alle caselle cliccate
     clickedCells.add(index);
     scoreText.innerText = `Punteggio: ${clickedCells.size}`;
+
+    // Se il giocatore ha vinto    
+    if(clickedCells.size === (cellsNumber - 16)) {
+      gameWin = true;
+      resultText.innerText = "Hai vinto!";
+    }
   }
 }
 
