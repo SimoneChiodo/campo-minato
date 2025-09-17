@@ -33,9 +33,9 @@ const cells = document.getElementsByClassName("cell"); // Prendo tutte le celle 
 for (const cell of cells) { 
   cell.addEventListener("mousedown", e => {
     if (e.button == 0) { // Click sinistro del mouse
-      const index = cell.id.split("-")[1];
+      const index = parseInt(cell.id.split("-")[1]); // Prendo l'indice dall'id e lo trasformo da stringa a numero
       cellClick(index);
-    } else if (e.button == 2 && cell.innerText === "") { // Click destro del mouse
+    } else if (e.button == 2 && cell.innerText === "" && gameWin === null) { // Click destro del mouse, se la casella non è già stata selezionata
       alert("right click");
     }
   });
