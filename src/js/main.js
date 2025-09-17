@@ -35,8 +35,9 @@ for (const cell of cells) {
     if (e.button == 0) { // Click sinistro del mouse
       const index = parseInt(cell.id.split("-")[1]); // Prendo l'indice dall'id e lo trasformo da stringa a numero
       cellClick(index);
-    } else if (e.button == 2 && cell.innerText === "" && gameWin === null) { // Click destro del mouse, se la casella non è già stata selezionata
-      alert("right click");
+    } else if (e.button == 2 && gameWin === null && (cell.innerText === "" || cell.innerText === "🚩")) { // Click destro del mouse, se la casella non è già stata selezionata
+      cell.addEventListener("contextmenu", e => e.preventDefault());
+      cell.innerText = cell.innerText === "" ?  "🚩" : "";
     }
   });
 }
@@ -73,7 +74,7 @@ function revealCell(index) {
   let nearBombsCounter = 0;
   let cellsPerLine = Math.sqrt(cellsNumber); // Radice quadrata del numero di celle totali (risultato: celle per linea)
   let column = Math.floor((index/10) * 10) % 10; // Prendo la prima cifra decimale dell'indice diviso 10 (risultato: numero della colonna della cella)
-  column === 1 && (column = 10);
+  column === 0 && (column = 10); // Se è nella decima colonna
 
   // Controllo riga attuale
   bombs.has(index-1) && column !== 1 && nearBombsCounter++;
