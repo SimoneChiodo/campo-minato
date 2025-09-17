@@ -4,22 +4,21 @@ const grid = document.getElementById("grid"); // Griglia del campo minato
 // Creo le variabili necessarie
 const array = []; // Array rappresentativo della griglia
 let difficulty = 1; // 1: facile; 2: medio; 3: difficile
+let cellsNumber; // Numero delle celle presenti nella griglia
+
+// Inizializzo i dati
+getCellsNumber();
 
 // Genero le posizioni delle bombe
 let bombs = new Set();
 while(bombs.size < 16)
-  bombs.add(randomNumber(0, getCellsNumbers()));
-// bombs.forEach(bomb => console.table(bomb))
+  bombs.add(randomNumber(0, cellsNumber));
+
 console.table(bombs);
 
-// Genero le celle della griglia
-for(let i = 0; i < getCellsNumbers(); i++) {
-  array.push(i+1);
-
-}
 
 // Inserisco le celle in HTML
-for(let i = 0; i < getCellsNumbers(); i++) {
+for(let i = 0; i < cellsNumber; i++) {
   grid.innerHTML += `<div class="col"> 
       <button id="cell-${i+1}" class="btn btn-success rounded-0" onclick="cellClick(${i+1})">  </button>
     </col>`;
@@ -30,18 +29,25 @@ function cellClick(index) {
     console.log("EXPLODED!");
 }
 
-// Funzione che prende la lunghezza della griglia
-function getCellsNumbers() {
+// Funzione che inizializza il numero di celle e le mostra correttamente in pagina
+function getCellsNumber() {
   switch(difficulty){
     case(1):
-      return 100;
+      cellsNumber = 100;
+      grid.style.gridTemplateColumns = "repeat(10, 50px)";
+      break;
     case(2):
-      return 81;
+      cellsNumber = 81;
+      grid.style.gridTemplateColumns = "repeat(9, 50px)";
+      break;
     case(3):
-      return 49;
+      cellsNumber = 49;
+      grid.style.gridTemplateColumns = "repeat(7, 50px)";
+      break;
 
     default:
-      return -1;
+      cellsNumber = 100;
+      grid.style.gridTemplateColumns = "repeat(7, 50px)";
   }
 }
 

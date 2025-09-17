@@ -1,7 +1,7 @@
 #grid {
   width: fit-content;
   display: grid;
-  grid-template-columns: repeat(7, 50px); /* 7 col. per riga larghe 50px */
+  /*grid-template-columns: repeat(7, 50px);*/ /* 7 col. per riga larghe 50px */
   grid-auto-rows: 50px; /* colonne alte 50px */
   gap: 0;
   border: 1px solid black; 
