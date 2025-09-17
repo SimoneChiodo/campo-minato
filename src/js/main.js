@@ -12,7 +12,7 @@ getCellsNumber();
 // Genero le posizioni delle bombe
 let bombs = new Set();
 while(bombs.size < 16)
-  bombs.add(randomNumber(0, cellsNumber));
+  bombs.add(randomNumber(1, cellsNumber));
 
 console.table(bombs);
 
@@ -25,8 +25,13 @@ for(let i = 0; i < cellsNumber; i++) {
 }
 
 function cellClick(index) {
-  if(bombs.has(index))
-    console.log("EXPLODED!");
+  if(bombs.has(index)) {
+    // Rivelo le bombe
+    bombs.forEach(bomb => {
+      const cell = document.getElementById(`cell-${bomb}`);
+      cell.innerText = "B";
+    });
+  }
 }
 
 // Funzione che inizializza il numero di celle e le mostra correttamente in pagina
