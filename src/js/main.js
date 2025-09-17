@@ -59,23 +59,24 @@ function cellClick(index) {
 function revealCell(index) {
   let nearBombsCounter = 0;
   let cellsPerLine = Math.sqrt(cellsNumber); // Radice quadrata del numero di celle totali (risultato: celle per linea)
-  
+  const column = Math.floor((index/10) * 10) % 10; // Prendo la prima cifra decimale dell'indice diviso 10 (risultato: numero della colonna della cella)
+
   // Controllo riga attuale
-  bombs.has(index-1) && nearBombsCounter++;
+  bombs.has(index-1) && column !== 1 && nearBombsCounter++;
   bombs.has(index) && nearBombsCounter++;
-  bombs.has(index+1) && nearBombsCounter++;
+  bombs.has(index+1) && column !== cellsPerLine && nearBombsCounter++;
 
   if(index < (cellsNumber-cellsPerLine)) { // Se non è nell'ultima riga
     let nextLine = index + cellsPerLine; // Controllo riga successiva
-    bombs.has(nextLine-1) && nearBombsCounter++;
+    bombs.has(nextLine-1) && column !== 1 && nearBombsCounter++;
     bombs.has(nextLine) && nearBombsCounter++;
-    bombs.has(nextLine+1) && nearBombsCounter++;
+    bombs.has(nextLine+1) && column !== cellsPerLine && nearBombsCounter++;
   }
   if(index > cellsPerLine) { // Se non è nella prima riga
     let previousLine = index - cellsPerLine; // Controllo riga precedente
-    bombs.has(previousLine-1) && nearBombsCounter++;
+    bombs.has(previousLine-1) && column !== 1 && nearBombsCounter++;
     bombs.has(previousLine) && nearBombsCounter++;
-    bombs.has(previousLine+1) && nearBombsCounter++;
+    bombs.has(previousLine+1) && column !== cellsPerLine && nearBombsCounter++;
   }
 
   return nearBombsCounter;
