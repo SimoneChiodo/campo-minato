@@ -30,20 +30,53 @@
       <!-- Header -->
       <header class="mt-3 text-center">
         <h1>Campo Minato</h1>
-        <h2 id="scoreText">Punteggio: 0</h2>
-        <h2 id="resultText" class="text-underline"></h2>
-        <a href="./index.html" class="btn btn-danger px-4 mt-3">Reset</a>
+        <!-- Buttons -->
+        <div id="helpButtons" class="d-none">
+          <a href="./index.html" class="btn btn-primary px-4 mt-3">Help</a>
+          <a href="./index.html" class="btn btn-danger px-4 mt-3">Reset</a>
+        </div>
+
+        <h2 id="resultText" class="mt-2 text-underline">&nbsp;</h2>
       </header>
 
       <!-- Main -->
-      <main class="my-5">
-        <!-- Grid -->
-        <div id="grid">
+      <main class="mb-5">
+        <div id="difficultySelection">
+          <h2 class="text-center my-3">Choose difficulty:</h2>
+          <form id="difficultyForm" class="d-flex flex-column gap-3 align-items-center">
+            <div class="form-check w-100">
+              <input class="form-check-input" type="radio" name="difficultyRadio" id="easy" checked>
+              <label class="form-check-label w-100" for="easy">
+                Easy
+              </label>
+            </div>
+            <div class="form-check w-100">
+              <input class="form-check-input" type="radio" name="difficultyRadio" id="medium">
+              <label class="form-check-label w-100" for="medium">
+                Medium
+              </label>
+            </div>
+            <div class="form-check w-100">
+              <input class="form-check-input" type="radio" name="difficultyRadio" id="hard">
+              <label class="form-check-label w-100" for="hard">
+                Hard
+              </label>
+            </div>
+
+            <input type="submit" value="Start" class="btn btn-success mt-3 px-4">
+          </form>
+        </div>
+
+        <div class="grid-container">
+          <!-- Score -->
+          <h2 id="scoreText" class="text-center my-3 d-none">Punteggio: 0</h2>
+
+          <!-- Grid -->
+          <div id="grid">
+          </div>
         </div>
       </main>
 
-      <!-- Footer -->
-      <footer></footer>
 
       <!-- BOOTSTRAP JS -->
       <script

@@ -1,48 +1,69 @@
+/* TODO:
+  - aggiungere delle istruzioni
+  - registrare il tempo impiegato
+  - salvare il tempo
+*/
+
 // Prendo gli elementi dalla pagina
+const form = document.getElementById("difficultyForm"); // Griglia del campo minato
 const grid = document.getElementById("grid"); // Griglia del campo minato
 const scoreText = document.getElementById("scoreText"); // Punteggio a schermo
 const resultText = document.getElementById("resultText"); // Risultato della partita
 
 // Creo le variabili necessarie
 const array = []; // Array rappresentativo della griglia
-let difficulty = 1; // 1: facile; 2: medio; 3: difficile
 let cellsNumber; // Numero delle celle presenti nella griglia
 let gameWin = null;
 let clickedCells = new Set();
 
-// Inizializzo i dati
-getCellsNumber();
+// Quando inizia la partita
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  // Prendo la difficoltà
+  let difficulty = form.querySelector("input[name='difficultyRadio']:checked").id;  
 
-// Genero le posizioni delle bombe
-let bombs = new Set();
-while(bombs.size < 16)
-  bombs.add(randomNumber(1, cellsNumber));
+  // Inizializzo i dati
+  getCellsNumber(difficulty);
 
-console.table(bombs);
+  // Genero le posizioni delle bombe
+  let bombs = new Set();
+  while(bombs.size < 16)
+    bombs.add(randomNumber(1, cellsNumber));
+
+  console.table(bombs);
 
 
-// Inserisco le celle in HTML
-for(let i = 0; i < cellsNumber; i++) {
-  grid.innerHTML += `<div class="col"> 
-      <button id="cell-${i+1}" class="btn btn-success rounded-0 fs-5 cell">  </button>
-    </col>`;
-}
+  // Inserisco le celle in HTML
+  for(let i = 0; i < cellsNumber; i++) {
+    grid.innerHTML += `<div class="col"> 
+        <button id="cell-${i+1}" class="btn btn-success rounded-0 fs-5 cell">  </button>
+      </col>`;
+  }
 
-const cells = document.getElementsByClassName("cell"); // Prendo tutte le celle in pagina
-// A ogni cella aggiungo gli eventi al click
-for (const cell of cells) { 
-  cell.addEventListener("mousedown", e => {
-    if (e.button == 0) { // Click sinistro del mouse
-      const index = parseInt(cell.id.split("-")[1]); // Prendo l'indice dall'id e lo trasformo da stringa a numero
-      cellClick(index);
-    } else if (e.button == 2 && gameWin === null && (cell.innerText === "" || cell.innerText === "🚩")) { // Click destro del mouse, se la casella non è già stata selezionata
-      cell.addEventListener("contextmenu", e => e.preventDefault());
-      cell.innerText = cell.innerText === "" ?  "🚩" : "";
-    }
-  });
-}
+  const cells = document.getElementsByClassName("cell"); // Prendo tutte le celle in pagina
+  // A ogni cella aggiungo gli eventi al click
+  for (const cell of cells) { 
+    cell.addEventListener("mousedown", e => {
+      if (e.button == 0) { // Click sinistro del mouse
+        const index = parseInt(cell.id.split("-")[1]); // Prendo l'indice dall'id e lo trasformo da stringa a numero
+        cellClick(index, bombs);
+        console.log("ciao");
+        
+      } else if (e.button == 2 && gameWin === null && (cell.innerText === "" || cell.innerText === "🚩")) { // Click destro del mouse, se la casella non è già stata selezionata
+        cell.addEventListener("contextmenu", e => e.preventDefault());
+        cell.innerText = cell.innerText === "" ?  "🚩" : "";
+      }
+    });
+  }
+
+  document.getElementById("scoreText").classList.remove("d-none"); // Mostro il punteggio
+  document.getElementById("helpButtons").classList.remove("d-none"); // Mostro i pulsanti reset e info
+  document.getElementById("difficultySelection").classList.add("d-none"); // Nascondo il form
+});
+
+
 // Funzione chiamata a ogni clic di una cella
-function cellClick(index) {
+function cellClick(index, bombs) {
   // Prendo la cella selezionata
   const cell = document.getElementById(`cell-${index}`); 
   
@@ -60,7 +81,7 @@ function cellClick(index) {
     gameWin = false;
     resultText.innerText = "Hai perso!";
   } else if(gameWin === null) {
-    cell.innerText = revealCell(index); // Mostro la cella
+    cell.innerText = revealCell(index, bombs); // Mostro la cella
 
     // Aggiungi la cella alle caselle cliccate
     clickedCells.add(index);
@@ -75,7 +96,7 @@ function cellClick(index) {
 }
 
 // Funzione che restituisce il numero delle bombe vicino alla casella
-function revealCell(index) {
+function revealCell(index, bombs) {
   let nearBombsCounter = 0;
   let cellsPerLine = Math.sqrt(cellsNumber); // Radice quadrata del numero di celle totali (risultato: celle per linea)
   let column = Math.floor((index/10) * 10) % 10; // Prendo la prima cifra decimale dell'indice diviso 10 (risultato: numero della colonna della cella)
@@ -103,17 +124,17 @@ function revealCell(index) {
 }
 
 // Funzione che inizializza il numero di celle e le mostra correttamente in pagina
-function getCellsNumber() {
+function getCellsNumber(difficulty) {
   switch(difficulty){
-    case(1):
+    case("easy"):
       cellsNumber = 100;
       grid.style.gridTemplateColumns = "repeat(10, 50px)";
       break;
-    case(2):
+    case("medium"):
       cellsNumber = 81;
       grid.style.gridTemplateColumns = "repeat(9, 50px)";
       break;
-    case(3):
+    case("hard"):
       cellsNumber = 49;
       grid.style.gridTemplateColumns = "repeat(7, 50px)";
       break;
