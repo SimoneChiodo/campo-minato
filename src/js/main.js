@@ -15,6 +15,12 @@ let cellsNumber; // Numero delle celle presenti nella griglia
 let gameWin = null;
 let clickedCells = new Set();
 
+// Quando finisce la partita il pulsante reset, ricarica la pagina, senza aprire la modal
+document.getElementById("reload-button").addEventListener("click", () => {
+  if(gameWin !== null) // Se la partità è finita
+    location.reload(); // Ricarico la pagina
+})
+
 // Quando inizia la partita
 form.addEventListener("submit", (e) => {
   e.preventDefault();
