@@ -64,7 +64,7 @@ form.addEventListener("submit", (e) => {
     });
   }
 
-  document.getElementById("scoreText").classList.remove("d-none"); // Mostro il punteggio
+  document.getElementById("game-container").classList.remove("d-none"); // Mostro il punteggio e la griglia
   document.getElementById("helpButtons").classList.remove("d-none"); // Mostro i pulsanti reset e info
   document.getElementById("difficultyForm").classList.add("d-none"); // Nascondo il form
 });

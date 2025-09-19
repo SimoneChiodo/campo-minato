@@ -1,8 +1,4 @@
 /* UTILITIES */
-.vh-100 {
-  height: 100vh;
-}
-
 /* HEADER */
 header {
   min-width: 170px;
@@ -25,4 +21,16 @@ header {
 #grid > .col > button {
   width: 100%;
   height: 100%;
+}
+
+
+/* BACKGROUND */
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
 }
