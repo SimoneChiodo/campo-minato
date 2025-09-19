@@ -1,5 +1,4 @@
 /* TODO:
-  - aggiungere delle istruzioni
   - registrare il tempo impiegato
   - salvare il tempo
 */

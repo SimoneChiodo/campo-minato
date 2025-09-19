@@ -32,7 +32,9 @@
         <h1>Campo Minato</h1>
         <!-- Buttons -->
         <div id="helpButtons" class="d-none">
-          <a href="./index.html" class="btn btn-primary px-4 mt-3">Help</a>
+          <button class="btn btn-primary px-4 mt-3" data-bs-toggle="modal" data-bs-target="#infoModal">
+            Help
+          </button>
           <a href="./index.html" class="btn btn-danger px-4 mt-3">Reset</a>
         </div>
 
@@ -77,6 +79,41 @@
         </div>
       </main>
 
+      <!-- MODAL -->
+      <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5">
+                📝 Regole del Gioco - Campo Minato
+              </h1>
+            </div>
+            <div class="modal-body">
+              <ol>
+                <li>
+                  <b>Click sinistro</b> su una cella per <b>scoprirla</b>.
+                </li>
+                <li>
+                  <b>Evita le bombe</b> 💣: se clicchi sopra una bomba la partita termina.
+                </li>
+                <li>
+                  <b>Click destro</b> su una cella per <b>segnalarla come sospetta</b> 🚩.
+                </li>
+                <li>
+                  Ogni cella rivelata mostra un <b>numero</b> che indica quante bombe ci sono nelle <b>celle confinanti</b> (anche in diagonale).
+                </li>
+                <li>
+                  Vinci la partita quando hai scoperto <b>tutte le celle senza bomba</b>.
+                </li>
+              </ol>
+
+              <div class="d-flex justify-content-end mt-2">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- BOOTSTRAP JS -->
       <script
