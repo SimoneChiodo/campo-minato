@@ -14,6 +14,7 @@ const array = []; // Array rappresentativo della griglia
 let cellsNumber; // Numero delle celle presenti nella griglia
 let gameWin = null;
 let clickedCells = new Set();
+let flagsCounter = 0;
 
 // Quando finisce la partita il pulsante reset, ricarica la pagina, senza aprire la modal
 document.getElementById("reload-button").addEventListener("click", () => {
@@ -35,9 +36,6 @@ form.addEventListener("submit", (e) => {
   while(bombs.size < 16)
     bombs.add(randomNumber(1, cellsNumber));
 
-  console.table(bombs);
-
-
   // Inserisco le celle in HTML
   for(let i = 0; i < cellsNumber; i++) {
     grid.innerHTML += `<div class="col"> 
@@ -51,10 +49,17 @@ form.addEventListener("submit", (e) => {
     cell.addEventListener("mousedown", e => {
       if (e.button == 0) { // Click sinistro del mouse
         const index = parseInt(cell.id.split("-")[1]); // Prendo l'indice dall'id e lo trasformo da stringa a numero
-        cellClick(index, bombs);
+        cellClick(cell, index, bombs);
       } else if (e.button == 2 && gameWin === null && (cell.innerText === "" || cell.innerText === "🚩")) { // Click destro del mouse, se la casella non è già stata selezionata
-        cell.addEventListener("contextmenu", e => e.preventDefault());
-        cell.innerText = cell.innerText === "" ?  "🚩" : "";
+        cell.addEventListener("contextmenu", e => e.preventDefault()); // Evito il menu del click destro
+
+        if(cell.innerText === "") { // Se la casella è vuota: metto la bandiera
+          cell.innerText = "🚩";
+          document.getElementById("remaining-bomb").innerText = "Bombe rimaste: " + (bombs.size - ++flagsCounter);
+        } else { // Se c'è una bandiera: la rimuovo
+          cell.innerText = "";
+          document.getElementById("remaining-bomb").innerText = "Bombe rimaste: " + (bombs.size - --flagsCounter);
+        }
       }
     });
   }
@@ -66,15 +71,13 @@ form.addEventListener("submit", (e) => {
 
 
 // Funzione chiamata a ogni clic di una cella
-function cellClick(index, bombs) {
-  // Prendo la cella selezionata
-  const cell = document.getElementById(`cell-${index}`); 
-  
-  if(cell.innerText === "🚩") // Se questa casella è stata segnalata, allora non faccio nulla
+function cellClick(cell, index, bombs) {  
+  // Se questa casella è stata segnalata o la partita è finita, allora non faccio nulla
+  if(cell.innerText === "🚩" || gameWin !== null) 
     return;
 
   // Se è stata cliccata una bomba
-  if(bombs.has(index) && gameWin === null) {
+  if(bombs.has(index)) {
     // Rivelo le bombe
     bombs.forEach(bomb => {
       const cell = document.getElementById(`cell-${bomb}`); // Cella con la bomba
@@ -83,7 +86,8 @@ function cellClick(index, bombs) {
     // Informo che si ha perso
     gameWin = false;
     resultText.innerText = "Hai perso!";
-  } else if(gameWin === null) {
+    document.getElementById("remaining-bomb").innerText = ""; // Nascondo il numero di bombe rimaste
+  } else {
     cell.innerText = revealCell(index, bombs); // Mostro la cella
 
     // Aggiungi la cella alle caselle cliccate
@@ -94,6 +98,7 @@ function cellClick(index, bombs) {
     if(clickedCells.size === (cellsNumber - 16)) {
       gameWin = true;
       resultText.innerText = "Hai vinto!";
+      document.getElementById("remaining-bomb").innerText = ""; // Nascondo il numero di bombe rimaste
     }
   }
 }
@@ -102,15 +107,18 @@ function cellClick(index, bombs) {
 function revealCell(index, bombs) {
   let nearBombsCounter = 0;
   let cellsPerLine = Math.sqrt(cellsNumber); // Radice quadrata del numero di celle totali (risultato: celle per linea)
-  let column = Math.floor((index/10) * 10) % 10; // Prendo la prima cifra decimale dell'indice diviso 10 (risultato: numero della colonna della cella)
-  column === 0 && (column = 10); // Se è nella decima colonna
+  let column = Math.floor(index) % cellsPerLine; // Prendo la prima cifra decimale dell'indice diviso il numero di celle per linea (risultato: numero della colonna della cella)
+  if(column === 0) { // Se è nell'ultima colonna
+    cellsPerLine === 10 ? (column = 10) : 
+      cellsPerLine === 9 ? (column = 9) : (column = 7);
+  }
 
   // Controllo riga attuale
   bombs.has(index-1) && column !== 1 && nearBombsCounter++;
   bombs.has(index) && nearBombsCounter++;
   bombs.has(index+1) && column !== cellsPerLine && nearBombsCounter++;
 
-  if(index < (cellsNumber-cellsPerLine)) { // Se non è nell'ultima riga
+  if(index <= (cellsNumber-cellsPerLine)) { // Se non è nell'ultima riga
     let nextLine = index + cellsPerLine; // Controllo riga successiva
     bombs.has(nextLine-1) && column !== 1 && nearBombsCounter++;
     bombs.has(nextLine) && nearBombsCounter++;
