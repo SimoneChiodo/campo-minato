@@ -46,8 +46,6 @@ form.addEventListener("submit", (e) => {
       if (e.button == 0) { // Click sinistro del mouse
         const index = parseInt(cell.id.split("-")[1]); // Prendo l'indice dall'id e lo trasformo da stringa a numero
         cellClick(index, bombs);
-        console.log("ciao");
-        
       } else if (e.button == 2 && gameWin === null && (cell.innerText === "" || cell.innerText === "🚩")) { // Click destro del mouse, se la casella non è già stata selezionata
         cell.addEventListener("contextmenu", e => e.preventDefault());
         cell.innerText = cell.innerText === "" ?  "🚩" : "";
@@ -57,7 +55,7 @@ form.addEventListener("submit", (e) => {
 
   document.getElementById("scoreText").classList.remove("d-none"); // Mostro il punteggio
   document.getElementById("helpButtons").classList.remove("d-none"); // Mostro i pulsanti reset e info
-  document.getElementById("difficultySelection").classList.add("d-none"); // Nascondo il form
+  document.getElementById("difficultyForm").classList.add("d-none"); // Nascondo il form
 });
 
 
