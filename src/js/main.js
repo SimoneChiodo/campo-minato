@@ -1,4 +1,5 @@
 /* TODO:
+  - colorare la scritta hai vinto/perso
   - registrare il tempo impiegato
   - salvare il tempo
 */
@@ -8,6 +9,7 @@ const form = document.getElementById("difficultyForm"); // Griglia del campo min
 const grid = document.getElementById("grid"); // Griglia del campo minato
 const scoreText = document.getElementById("scoreText"); // Punteggio a schermo
 const resultText = document.getElementById("resultText"); // Risultato della partita
+const timeText = document.getElementById("timeText"); // Risultato della partita
 
 // Creo le variabili necessarie
 const array = []; // Array rappresentativo della griglia
@@ -15,6 +17,7 @@ let cellsNumber; // Numero delle celle presenti nella griglia
 let gameWin = null;
 let clickedCells = new Set();
 let flagsCounter = 0;
+let isStarted = false;
 
 // Quando finisce la partita il pulsante reset, ricarica la pagina, senza aprire la modal
 document.getElementById("reload-button").addEventListener("click", () => {
@@ -76,6 +79,12 @@ function cellClick(cell, index, bombs) {
   if(cell.innerText === "🚩" || gameWin !== null) 
     return;
 
+  // Faccio partire il cronometro
+  if(isStarted === false) {
+    isStarted = true;
+    start();
+  }
+
   // Se è stata cliccata una bomba
   if(bombs.has(index)) {
     // Rivelo le bombe
@@ -85,6 +94,7 @@ function cellClick(cell, index, bombs) {
     });
     // Informo che si ha perso
     gameWin = false;
+    stop(); // Fermo il timer
     resultText.innerText = "Hai perso!";
     document.getElementById("remaining-bomb").innerText = ""; // Nascondo il numero di bombe rimaste
   } else {
@@ -98,6 +108,7 @@ function cellClick(cell, index, bombs) {
     if(clickedCells.size === (cellsNumber - 16)) {
       gameWin = true;
       resultText.innerText = "Hai vinto!";
+      stop(); // Fermo il timer
       document.getElementById("remaining-bomb").innerText = ""; // Nascondo il numero di bombe rimaste
     }
   }
@@ -154,6 +165,36 @@ function getCellsNumber(difficulty) {
       cellsNumber = 100;
       grid.style.gridTemplateColumns = "repeat(7, 50px)";
   }
+}
+
+// Funzione che fa partire il cronometro
+let seconds = -1;
+let minutes = 0;
+let timeout;
+function start() {
+  timeText.textContent = formatCount(++seconds); // Aggiorno il testo
+  timeout = setTimeout(start, 1000); // Avvio il timer
+}
+
+// Funzione che ferma il cronometro
+function stop() {
+  clearInterval(timeout);
+}
+
+// Funzione che mostra il testo del cronometro formattato
+function formatCount() {
+  let output = "";
+  if(seconds === 60) { // Aggiungo un minuto
+    minutes++;
+    seconds = 0;
+  }
+
+  minutes < 10 && (output += "0"); // Formatto i minuti
+  output += minutes + " : "; // Mostro i minuti
+  seconds < 10 && (output += "0"); // Formatto i secondi
+  output += seconds; // Mostri i secondi
+
+  return output;
 }
 
 /**
