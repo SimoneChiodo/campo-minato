@@ -1,4 +1,34 @@
 /* UTILITIES */
+/* Win Text */
+.win-text {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #00ff88;
+  text-shadow: 0 0 10px #00ff88, 0 0 20px #00ffcc, 0 0 40px #00ffaa;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+/* Loose Text */
+.loose-text {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ff3333;
+  text-shadow: 2px 2px 5px #000, 0 0 10px #ff0000;
+  animation: shake 0.4s infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+
 /* HEADER */
 header {
   min-width: 170px;

@@ -1,7 +1,3 @@
-/* TODO:
-  - colorare la scritta hai vinto/perso
-*/
-
 // Prendo gli elementi dalla pagina
 const form = document.getElementById("difficultyForm"); // Griglia del campo minato
 const grid = document.getElementById("grid"); // Griglia del campo minato
@@ -97,6 +93,7 @@ function cellClick(cell, index, bombs) {
     gameWin = false;
     stop(); // Fermo il timer
     resultText.innerText = "Hai perso!";
+    resultText.classList.add("loose-text");
     document.getElementById("remaining-bomb").innerText = ""; // Nascondo il numero di bombe rimaste
     saveScore(); // Salvo il punteggio
     showScore(); // Mostro i punteggi
@@ -111,6 +108,7 @@ function cellClick(cell, index, bombs) {
     if(clickedCells.size === (cellsNumber - 16)) {
       gameWin = true;
       resultText.innerText = "Hai vinto!";
+      resultText.classList.add("win-text");
       stop(); // Fermo il timer
       document.getElementById("remaining-bomb").innerText = ""; // Nascondo il numero di bombe rimaste
       saveScore(); // Salvo il punteggio
