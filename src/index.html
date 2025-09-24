@@ -65,7 +65,7 @@
             </label>
           </div>
 
-          <input type="submit" value="Start" class="btn btn-success mt-3 px-4">
+          <input type="submit" value="Start" class="btn btn-success btn-lg mt-3 px-4">
         </form>
 
         <!-- Buttons -->
@@ -80,6 +80,7 @@
           </button>
         </div>
 
+        <!-- Game -->
         <div id="game-container" class="text-center mt-3 d-none">
           <!-- Score -->
           <h2 id="scoreText">Punteggio: 0</h2>
@@ -90,6 +91,21 @@
 
           <!-- Remaning Bombs -->
           <i id="remaining-bomb" class="fs-5"></i>
+        </div>
+
+        <!-- Scores -->
+        <div>
+          <table id="scoreTable" class="table d-none rounded" data-bs-theme="dark">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Score</th>
+                <th scope="col">Time</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody id="scoreLines"></tbody>
+          </table>
         </div>
       </main>
 

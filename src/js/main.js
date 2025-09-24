@@ -1,7 +1,5 @@
 /* TODO:
   - colorare la scritta hai vinto/perso
-  - registrare il tempo impiegato
-  - salvare il tempo
 */
 
 // Prendo gli elementi dalla pagina
@@ -10,6 +8,8 @@ const grid = document.getElementById("grid"); // Griglia del campo minato
 const scoreText = document.getElementById("scoreText"); // Punteggio a schermo
 const resultText = document.getElementById("resultText"); // Risultato della partita
 const timeText = document.getElementById("timeText"); // Risultato della partita
+const scoreTable = document.getElementById("scoreTable"); // Tabella con i punteggi
+const scoreLines = document.getElementById("scoreLines"); // Tabella con i punteggi
 
 // Creo le variabili necessarie
 const array = []; // Array rappresentativo della griglia
@@ -18,6 +18,7 @@ let gameWin = null;
 let clickedCells = new Set();
 let flagsCounter = 0;
 let isStarted = false;
+
 
 // Quando finisce la partita il pulsante reset, ricarica la pagina, senza aprire la modal
 document.getElementById("reload-button").addEventListener("click", () => {
@@ -97,6 +98,8 @@ function cellClick(cell, index, bombs) {
     stop(); // Fermo il timer
     resultText.innerText = "Hai perso!";
     document.getElementById("remaining-bomb").innerText = ""; // Nascondo il numero di bombe rimaste
+    saveScore(); // Salvo il punteggio
+    showScore(); // Mostro i punteggi
   } else {
     cell.innerText = revealCell(index, bombs); // Mostro la cella
 
@@ -110,6 +113,8 @@ function cellClick(cell, index, bombs) {
       resultText.innerText = "Hai vinto!";
       stop(); // Fermo il timer
       document.getElementById("remaining-bomb").innerText = ""; // Nascondo il numero di bombe rimaste
+      saveScore(); // Salvo il punteggio
+      showScore(); // Mostro i punteggi
     }
   }
 }
@@ -167,12 +172,65 @@ function getCellsNumber(difficulty) {
   }
 }
 
+// Funzione che mostra i punteggi
+let scores = JSON.parse(localStorage.getItem("scores")) || []; // Recupero i punteggi precedenti
+function showScore() {
+  scoreTable.classList.remove("d-none"); // Mostro la tabella
+  scoreLines.innerHTML = ""; // Resetto la tabella
+  scores.map(actualScore => {
+    scoreLines.innerHTML += `
+    <tr>
+      <th scope="row">${actualScore.date}</th>
+      <td>${actualScore.score}</td>
+      <td>${actualScore.time}</td>
+      <td>
+        <button class="btn btn-danger fa-sm" onClick="deleteScore('${actualScore.date}')">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+    `;
+  });
+
+  if(scores.length === 0) // Se la tebella rimane vuota
+    scoreLines.innerHTML += `
+    <tr>
+      <th scope="row"><i>none</i></th>
+      <td><i>none</i></td>
+      <td><i>none</i></td>
+      <td><i>none</i></td>
+    </tr>
+    `;
+}
+
+// Funzione che salva il punteggio
+function saveScore() {
+  // Creo il nuovo punteggio
+  scores.push({
+    date: new Date().toLocaleString(),
+    score: clickedCells.size,
+    time: formatCount()
+  });
+  // Salvo in memoria il nuovo punteggio
+  localStorage.setItem("scores", JSON.stringify(scores)); 
+  console.table(scores);
+}
+
+// Funzione che elimina un punteggio
+function deleteScore(date) {
+  localStorage.setItem("scores", JSON.stringify(scores.filter(score => (score.date !== date)))); 
+  scores = JSON.parse(localStorage.getItem("scores")); // Aggiorno anche l'array in memoria
+  showScore();
+  console.table(scores);
+}
+
 // Funzione che fa partire il cronometro
 let seconds = -1;
 let minutes = 0;
 let timeout;
 function start() {
-  timeText.textContent = formatCount(++seconds); // Aggiorno il testo
+  seconds++;
+  timeText.textContent = formatCount(); // Aggiorno il testo
   timeout = setTimeout(start, 1000); // Avvio il timer
 }
 
