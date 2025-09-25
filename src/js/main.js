@@ -10,10 +10,11 @@ const scoreLines = document.getElementById("scoreLines"); // Tabella con i punte
 // Creo le variabili necessarie
 const array = []; // Array rappresentativo della griglia
 let cellsNumber; // Numero delle celle presenti nella griglia
-let gameWin = null;
-let clickedCells = new Set();
-let flagsCounter = 0;
-let isStarted = false;
+let difficulty; // Difficoltà scelta (easy, medium, hard)
+let gameWin = null; // Contiene null se la partita non è finita, true se si ha vinto e false se si ha perso
+let clickedCells = new Set(); // Il numero delle celle cliccate
+let flagsCounter = 0; // Il numero delle bandiere piantate dall'utente
+let isStarted = false; // Controlla se la partita è iniziata
 
 
 // Quando finisce la partita il pulsante reset, ricarica la pagina, senza aprire la modal
@@ -26,7 +27,7 @@ document.getElementById("reload-button").addEventListener("click", () => {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   // Prendo la difficoltà
-  let difficulty = form.querySelector("input[name='difficultyRadio']:checked").id;  
+  difficulty = form.querySelector("input[name='difficultyRadio']:checked").id;  
 
   // Inizializzo i dati
   getCellsNumber(difficulty);
@@ -175,7 +176,8 @@ let scores = JSON.parse(localStorage.getItem("scores")) || []; // Recupero i pun
 function showScore() {
   scoreTable.classList.remove("d-none"); // Mostro la tabella
   scoreLines.innerHTML = ""; // Resetto la tabella
-  scores.map(actualScore => {
+  const filteredScore = scores.filter(score => score.difficulty === difficulty); // Prendo solo i punteggi della difficoltà selezionata
+  filteredScore.map(actualScore => {
     scoreLines.innerHTML += `
     <tr>
       <th scope="row">${actualScore.date}</th>
@@ -190,7 +192,7 @@ function showScore() {
     `;
   });
 
-  if(scores.length === 0) // Se la tebella rimane vuota
+  if(filteredScore.length === 0) // Se la tebella rimane vuota
     scoreLines.innerHTML += `
     <tr>
       <th scope="row"><i>none</i></th>
@@ -207,11 +209,11 @@ function saveScore() {
   scores.push({
     date: new Date().toLocaleString(),
     score: clickedCells.size,
-    time: formatCount()
+    time: formatCount(),
+    difficulty: difficulty
   });
   // Salvo in memoria il nuovo punteggio
   localStorage.setItem("scores", JSON.stringify(scores)); 
-  console.table(scores);
 }
 
 // Funzione che elimina un punteggio
@@ -219,7 +221,6 @@ function deleteScore(date) {
   localStorage.setItem("scores", JSON.stringify(scores.filter(score => (score.date !== date)))); 
   scores = JSON.parse(localStorage.getItem("scores")); // Aggiorno anche l'array in memoria
   showScore();
-  console.table(scores);
 }
 
 // Funzione che fa partire il cronometro
