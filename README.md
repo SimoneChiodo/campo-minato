@@ -8,7 +8,13 @@ Prima della realizzazione del gioco completo, sono stati sviluppati **due eserci
 ## 🌍 Funzionalità principali
 - **Griglia di gioco dinamica**: generazione di una griglia 7x7 (49 celle) nella versione base.  
 - **Clic sulle celle**: l’utente può scoprire le celle e accumulare punteggio.  
+- **Numeri bombe confinanti**: una volta cliccato su una cella, verrà rivelato il numero delle bombe confinanti con essa.  
 - **Gestione bombe**: 16 bombe posizionate casualmente, senza duplicati.  
+- **Difficoltà di gioco**: Il gioco contiene 3 difficoltà differenti (ognuna con 16 bombe):
+  - **Easy**: griglia 10x10 (100 celle);  
+  - **Medium**: griglia 9x9 (81 celle);  
+  - **Hard**: griglia 7x7 (49 celle).  
+- **Classifica**: per ogni partita, verrà contato il tempo impiegato e il punteggio, questi dati verranno salvati in memoria sfruttando l'oggetto `localStorage`.  
 - **Game Over**: la partita termina quando l’utente colpisce una bomba o raggiunge il punteggio massimo. 
 
 ## 🛠️ Tecnologie utilizzate
